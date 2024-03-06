@@ -7,6 +7,7 @@ defmodule PetProject.MixProject do
       version: "0.1.0",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
+      compilers: Mix.compilers(),
       deps: deps()
     ]
   end
@@ -14,7 +15,8 @@ defmodule PetProject.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {PetProject.Application, []}
     ]
   end
 
