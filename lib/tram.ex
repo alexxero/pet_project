@@ -60,13 +60,15 @@ defmodule Tram do
   def handle_call(:open_doors, _from, :stop), do: {:reply, :open_doors, :open_doors}
 
   @impl true
-  def handle_call(:open_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+  def handle_call(:open_doors, _from, invalid_state),
+    do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
   def handle_call(:close_doors, _from, :open_doors), do: {:reply, :close_doors, :close_doors}
 
   @impl true
-  def handle_call(:close_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+  def handle_call(:close_doors, _from, invalid_state),
+    do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
   def handle_call(:get_state, _from, state), do: {:reply, state, state}
