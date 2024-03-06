@@ -4,30 +4,30 @@ defmodule Tram do
   # Client
 
   def start_link(_) do
-    GenServer.start_link(__MODULE__, :ok)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  def stop() do
+  def stop do
     GenServer.call(__MODULE__, :stop)
   end
 
-  def go() do
-    GenServer.call(__MODULE__, :stop)
+  def go do
+    GenServer.call(__MODULE__, :go)
   end
 
-  def open_doors() do
+  def open_doors do
     GenServer.call(__MODULE__, :open_doors)
   end
 
-  def close_doors() do
-    GenServer.call(__MODULE__, :open_doors)
+  def close_doors do
+    GenServer.call(__MODULE__, :close_doors)
   end
 
-  def end_shift() do
+  def end_shift do
     GenServer.cast(__MODULE__, :end_shift)
   end
 
-  def error_message() do
+  def error_message do
     {:error, "Operation is denied"}
   end
 
@@ -39,41 +39,35 @@ defmodule Tram do
   end
 
   @impl true
-  def handle_call(:stop, _from, state) do
-    case state do
-      :start_shift -> {:reply, :ok, :stop}
-      _invalid_state -> {:reply, :invalid_transition, state}
-    end
-  end
+  def handle_call(:stop, _from, :start_shift), do: {:reply, :ok, :stop}
 
   @impl true
-  def handle_call(:go, _from, state) do
-    case state do
-      :close_doors -> {:reply, :ok, :go}
-      :stop -> {:reply, :ok, :go}
-      _invalid_state -> {:reply, :invalid_transition, state}
-    end
-  end
+  def handle_call(:stop, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
-  def handle_call(:open_doors, _from, state) do
-    case state do
-      :close_doors -> {:reply, :ok, :close_doors}
-      :stop -> {:reply, :ok, :close_doors}
-      _invalid_state -> {:reply, :invalid_transition, state}
-    end
-  end
+  def handle_call(:go, _from, :close_doors), do: {:reply, :ok, :go}
 
   @impl true
-  def handle_call(:close_doors, _from, state) do
-    case state do
-      :open_doors -> {:reply, :ok, :close_doors}
-      _invalid_state -> {:reply, :invalid_transition, state}
-    end
-  end
+  def handle_call(:go, _from, :stop), do: {:reply, :ok, :go}
 
   @impl true
-  def handle_cast(:end_shift, _state) do
-    {:noreply, :end_shift}
-  end
+  def handle_call(:go, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+
+  @impl true
+  def handle_call(:open_doors, _from, :close_doors), do: {:reply, :ok, :open_doors}
+
+  @impl true
+  def handle_call(:open_doors, _from, :stop), do: {:reply, :ok, :open_doors}
+
+  @impl true
+  def handle_call(:open_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+
+  @impl true
+  def handle_call(:close_doors, _from, :open_doors), do: {:reply, :ok, :close_doors}
+
+  @impl true
+  def handle_call(:close_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+
+  @impl true
+  def handle_cast(:end_shift, _state), do: {:stop, :shutdown, :end_shift}
 end
