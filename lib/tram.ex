@@ -23,12 +23,12 @@ defmodule Tram do
     GenServer.call(__MODULE__, :close_doors)
   end
 
-  def end_shift do
-    GenServer.cast(__MODULE__, :end_shift)
+  def get_state do
+    GenServer.call(__MODULE__, :get_state)
   end
 
-  def error_message do
-    {:error, "Operation is denied"}
+  def end_shift do
+    GenServer.cast(__MODULE__, :end_shift)
   end
 
   # Server (callbacks)
@@ -39,34 +39,37 @@ defmodule Tram do
   end
 
   @impl true
-  def handle_call(:stop, _from, :start_shift), do: {:reply, :ok, :stop}
+  def handle_call(:stop, _from, :start_shift), do: {:reply, :stop, :stop}
 
   @impl true
   def handle_call(:stop, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
-  def handle_call(:go, _from, :close_doors), do: {:reply, :ok, :go}
+  def handle_call(:go, _from, :close_doors), do: {:reply, :go, :go}
 
   @impl true
-  def handle_call(:go, _from, :stop), do: {:reply, :ok, :go}
+  def handle_call(:go, _from, :stop), do: {:reply, :go, :go}
 
   @impl true
   def handle_call(:go, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
-  def handle_call(:open_doors, _from, :close_doors), do: {:reply, :ok, :open_doors}
+  def handle_call(:open_doors, _from, :close_doors), do: {:reply, :open_doors, :open_doors}
 
   @impl true
-  def handle_call(:open_doors, _from, :stop), do: {:reply, :ok, :open_doors}
+  def handle_call(:open_doors, _from, :stop), do: {:reply, :open_doors, :open_doors}
 
   @impl true
   def handle_call(:open_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
 
   @impl true
-  def handle_call(:close_doors, _from, :open_doors), do: {:reply, :ok, :close_doors}
+  def handle_call(:close_doors, _from, :open_doors), do: {:reply, :close_doors, :close_doors}
 
   @impl true
   def handle_call(:close_doors, _from, invalid_state), do: {:reply, :invalid_transition, invalid_state}
+
+  @impl true
+  def handle_call(:get_state, _from, state), do: {:reply, state, state}
 
   @impl true
   def handle_cast(:end_shift, _state), do: {:stop, :shutdown, :end_shift}
