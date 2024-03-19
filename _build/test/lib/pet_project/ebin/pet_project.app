@@ -1,7 +1,10 @@
 {application,pet_project,
              [{optional_applications,[]},
-              {applications,[kernel,stdlib,elixir,logger]},
+              {applications,[kernel,stdlib,elixir,logger,ecto,postgrex]},
               {description,"pet_project"},
-              {modules,['Elixir.PetProject']},
+              {modules,['Elixir.PetProject','Elixir.PetProject.Application',
+                        'Elixir.PetProject.Artist','Elixir.PetProject.Repo',
+                        'Elixir.PetProject.Song']},
               {registered,[]},
-              {vsn,"0.1.0"}]}.
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.PetProject.Application',[]}}]}.
