@@ -5,8 +5,9 @@ defmodule PetProject.MixProject do
     [
       app: :pet_project,
       version: "0.1.0",
-      elixir: "~> 1.16",
+      elixir: "~ 1.16",
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps()
     ]
   end
@@ -19,11 +20,18 @@ defmodule PetProject.MixProject do
     ]
   end
 
+  defp aliases do
+    [
+      setup: ["ecto.drop", "ecto.create --quiet", "ecto.migrate"],
+      test: ["setup", "ecto.migrate", "test"]
+    ]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 2.0"},
-      {:postgrex, "~> 0.11"}
+      {:ecto, "~ 2.0"},
+      {:postgrex, "~ 0.11"}
     ]
   end
 end
