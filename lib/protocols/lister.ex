@@ -1,4 +1,6 @@
 defprotocol Lister do
+  @moduledoc "Имплементация протокола для конвертации переданных данных в список"
+
   def to_list(data)
 end
 
@@ -19,7 +21,7 @@ defimpl Lister, for: BitString do
 end
 
 defimpl Lister, for: Atom do
-  def to_list(atom), do: Atom.to_string(atom) |> String.split("", trim: true)
+  def to_list(atom), do: atom |> Atom.to_string() |> Lister.to_list()
 end
 
 defimpl Lister, for: Integer do
