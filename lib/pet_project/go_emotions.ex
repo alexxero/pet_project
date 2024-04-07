@@ -10,7 +10,7 @@ defmodule PetProject.TextGenerator do
 
   @impl GenServer
   def init(opts) do
-    {model_base, opts} = Keyword.pop(opts, :model, {:hf, "mistralai/Mistral-7B-Instruct-v0.2"})
+    {model_base, opts} = Keyword.pop(opts, :model, {:hf, "keeeeenw/MicroLlama"})
     stream? = !!Keyword.pop(opts, :stream, false)
 
     {:ok, model} = Bumblebee.load_model(model_base)
@@ -31,7 +31,7 @@ defmodule PetProject.TextGenerator do
     {:reply, Nx.Serving.run(serving, prompt) |> Enum.to_list(), state}
   end
 
-  def call(request, opts) do
+  def call(request, opts \\ []) do
     {callback, opts} = Keyword.pop(opts, :callback)
     {name, _opts} = Keyword.pop(opts, :name, __MODULE__)
     response = GenServer.call(name, {:serve, request}, :infinity)
