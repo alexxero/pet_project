@@ -24,7 +24,7 @@ defmodule ListerTest do
     end
 
     test "integer" do
-      assert [1, 2, 3, 4, 5] == to_list(12345)
+      assert [1, 2, 3, 4, 5] == to_list(12_345)
     end
 
     test "float" do
