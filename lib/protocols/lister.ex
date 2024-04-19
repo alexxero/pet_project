@@ -17,7 +17,8 @@ defimpl Lister, for: Map do
 end
 
 defimpl Lister, for: BitString do
-  def to_list(string), do: String.split(string, "", trim: true)
+  def to_list(string) when is_binary(string), do: String.split(string, "", trim: true)
+  def to_list(_), do: raise "Not supported"
 end
 
 defimpl Lister, for: Atom do
